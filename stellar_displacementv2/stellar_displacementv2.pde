@@ -41,7 +41,8 @@ void draw() {
           for (int ii = 0; ii < starMapX.length; ii++){
             for (int iii = 0; iii < starMapY.length; iii++){
               if (x == starMapX[ii] && y == starMapY[iii]){
-                newStarMap();
+                fill(255, 0, 150);
+                ellipse(starMapX[ii], starMapY[iii], 10, 10);
               }
             }
           }
@@ -70,7 +71,6 @@ void newStarMap() {
   
   for (int i = 0; i < starCount; i++){
     starMapY[i] = int(random(10, 470));
-    println(i + ":" + starMapX[i] + "," + starMapY[i]);
   }
   
 }
