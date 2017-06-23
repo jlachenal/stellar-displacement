@@ -12,6 +12,18 @@ int starCount = 10;
 int[] starMapX = new int[starCount];
 int[] starMapY = new int[starCount];
 
+int[] hitStar = new int[starCount];
+
+int[] lines = new int[300];
+int lineIndex = 0;
+
+int lastHitX = -1;
+int lastHitY = -1;
+
+
+
+
+
 void setup() {
   
   size(640, 480);
@@ -23,9 +35,22 @@ void setup() {
   newStarMap();
   
 }
+
+int pointIsStar(int xx, int yy) {
+   for (int i = 0; i < starMapX.length; i++){
+    if ((xx == starMapX[i]) && (yy == starMapY[i])){
+      return i;
+    }
+  }
+  return -1;
+}
+
 void draw() {
   
-  img.loadPixels(); // applies pixel values to image
+  fill(0);
+  rect(0, 0, kinect.width, kinect.height);
+  
+  //img.loadPixels(); // applies pixel values to image
   
   PImage frame = kinect.getVideoImage();
   
@@ -36,41 +61,62 @@ void draw() {
      int c = frame.pixels[offset];
      float bright = brightness(c);
 
-     if (bright > 100){  
-       img.pixels[offset] = color(255, 0, 150);
-          for (int ii = 0; ii < starMapX.length; ii++){
-            for (int iii = 0; iii < starMapY.length; iii++){
-              if (x == starMapX[ii] && y == starMapY[iii]){
-                fill(255, 0, 150);
-                ellipse(starMapX[ii], starMapY[iii], 10, 10);
-              }
-            }
-          }
-     } else {
-       img.pixels[offset] = color(0);
+      //indicate bright spots
+      if (bright > 100){
+         //img.pixels[offset] = color(255, 0, 150);
+         fill(255, 0, 150);
+         rect(x, y, 1, 1);
+       }
+
+     int starIndex = pointIsStar(x, y);
+     if (starIndex >= 0){
+       //println("Found " + starIndex + " star at " + x + ", " + y);
+       if (bright > 100){
+         println("Hit " + starIndex + " star at " + x + ", " + y);
+         hitStar[starIndex] = 1;
+         
+         
+         if ((lastHitX != x) && (lastHitY != y)){
+           lines[lineIndex] = x;
+           lines[lineIndex+1] = y;
+           lineIndex += 2;
+           lastHitX = x;
+           lastHitY = y;
+         }
+         
+         println("Set last hit " + x + ", " + y);
+
+       } 
+       
+       noStroke();
+       if (hitStar[starIndex] == 1){
+         //println("Changing fill for star " + starIndex);
+         fill(255, 0, 150);
+       } else {
+         fill(255, 255, 255);       
+       }
+       ellipse(x, y, 10, 10);
      }
   }
  }
  
-  img.updatePixels(); // updates pixel values
-  
-  image(img,0,0); // loads the image, shows as-is
-  
-  for (int i = 0; i < starCount; i++){
-  noStroke();
-  ellipse(starMapX[i], starMapY[i], 10, 10);
-  }
-  
+ //Move through two by two with a look back.
+ for (int i = 0; i < lineIndex; i+=2){   
+   fill(255, 0, 150); 
+   stroke(255, 0, 150); 
+   line(lines[i], lines[i+1], lines[i+2], lines[i+3]);
+ }
 }
 
 void newStarMap() {
   
   for (int i = 0; i < starCount; i++){
     starMapX[i] = int(random(10, 630));
+    starMapY[i] = int(random(10, 470));  
+    hitStar[i] = 0;
   }
   
-  for (int i = 0; i < starCount; i++){
-    starMapY[i] = int(random(10, 470));
+  for (int i = 0; i < 300; i++) {
+    lines[i] = -1;
   }
-  
 }
