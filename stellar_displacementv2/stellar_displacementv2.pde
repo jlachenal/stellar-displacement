@@ -20,10 +20,6 @@ int lineIndex = 0;
 int lastHitX = -1;
 int lastHitY = -1;
 
-
-
-
-
 void setup() {
   
   size(640, 480);
@@ -102,10 +98,18 @@ void draw() {
  
  //Move through two by two with a look back.
  for (int i = 0; i < lineIndex; i+=2){   
-   fill(255, 0, 150); 
+   if (lines[i+2] == -1 || lines[i] == -1){break;}
+   
+   //fill(255, 0, 150); 
    stroke(255, 0, 150); 
    line(lines[i], lines[i+1], lines[i+2], lines[i+3]);
  }
+ 
+ stroke(0, 0, 0);
+ strokeWeight(1);
+ line(0, 0, 0, height);
+ line(0, 0, width, 0);
+
 }
 
 void newStarMap() {
