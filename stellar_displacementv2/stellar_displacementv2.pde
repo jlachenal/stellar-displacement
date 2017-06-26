@@ -5,20 +5,23 @@ import org.openkinect.tests.*;
 
 Kinect kinect;
 PImage img;
+PImage img2;
 
 int x;
 int y;
-int starCount = 10;
+int starCount = 20;
 int[] starMapX = new int[starCount];
 int[] starMapY = new int[starCount];
 
 int[] hitStar = new int[starCount];
 
-int[] lines = new int[300];
+int[] lines = new int[500];
 int lineIndex = 0;
 
 int lastHitX = -1;
 int lastHitY = -1;
+
+int resetTimer = 0;
 
 void setup() {
   
@@ -60,9 +63,17 @@ void draw() {
       //indicate bright spots
       if (bright > 100){
          //img.pixels[offset] = color(255, 0, 150);
-         fill(255, 0, 150);
-         rect(x, y, 1, 1);
+         fill(150, 0, 255);
+         ellipse(x, y, 10, 10);
+         resetTimer = 0;
+       } else {
+         resetTimer++;
        }
+       
+      if (resetTimer > 500000000){
+         newStarMap(); 
+         
+      }
 
      int starIndex = pointIsStar(x, y);
      if (starIndex >= 0){
@@ -122,5 +133,6 @@ void newStarMap() {
   
   for (int i = 0; i < 300; i++) {
     lines[i] = -1;
+    lineIndex = 0;
   }
 }
