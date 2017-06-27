@@ -63,7 +63,7 @@ void draw() {
       //indicate bright spots
       if (bright > 100){
          //img.pixels[offset] = color(255, 0, 150);
-         fill(150, 0, 255);
+         fill(156, 122, 249);
          ellipse(x, y, 10, 10);
          resetTimer = 0;
        } else {
@@ -98,7 +98,7 @@ void draw() {
        noStroke();
        if (hitStar[starIndex] == 1){
          //println("Changing fill for star " + starIndex);
-         fill(255, 0, 150);
+         fill(90, 30, 255);
        } else {
          fill(255, 255, 255);       
        }
@@ -112,7 +112,7 @@ void draw() {
    if (lines[i+2] == -1 || lines[i] == -1){break;}
    
    //fill(255, 0, 150); 
-   stroke(255, 0, 150); 
+   stroke(90, 30, 255); 
    line(lines[i], lines[i+1], lines[i+2], lines[i+3]);
  }
  
@@ -135,4 +135,5 @@ void newStarMap() {
     lines[i] = -1;
     lineIndex = 0;
   }
+  
 }
